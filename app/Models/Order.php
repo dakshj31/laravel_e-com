@@ -109,7 +109,7 @@ class Order extends Model
         return implode(',' , array_filter([
             $this->shipping_address_line_1,
             $this->shipping_address_line_2,
-            $this->shippimg_city,
+            $this->shipping_city,
             $this->shipping_state,
             $this->shipping_postal_code,
             $this->shipping_country,
@@ -124,6 +124,25 @@ class Order extends Model
             'notes'=>$notes,
             'user_id'=>$userId,
         ]);
+    }
+
+    protected static function boot() {
+        parent::boot();
+
+        static::creating(function($order) {
+            if(empty($order->order_number)) {
+                $order->order_number = 'ORD-' . strtoupper(uniqid());
+            }
+        });
+
+        static::created(function($order){
+            $order->statusHistories()->create([
+                'status'=> $order->status,
+                'notes' => 'Order created'
+            ]);
+        });
+
+        //order confirmation email
     }
 
 }
