@@ -71,7 +71,7 @@ class Product extends Model
 
     protected function inStock(Builder $query): void
     {
-        $query->where('stock_status', 'in_status')->where('stock_quantity', '>', 0);
+        $query->where('stock_status', 'in_stock')->where('stock_quantity', '>', 0);
     }
 
     #[Scope]
@@ -155,7 +155,7 @@ class Product extends Model
         return $this->approvedReviews()->avg('rating') ?? 0;
     }
 
-    public function getReviewsContAttribute()
+    public function getReviewsCountAttribute()
     {
         return $this->approvedReviews()->count();
     }
