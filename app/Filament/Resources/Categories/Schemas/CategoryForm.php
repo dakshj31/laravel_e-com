@@ -16,29 +16,49 @@ class CategoryForm
         return $schema
             ->components([
                 Section::make('Category Information')
+                ->columnSpanFull()
+                ->columns(2)
                 ->schema([
                     TextInput::make('name')
                     ->required(),
                 TextInput::make('slug')
-                    ->required(),
+                    ->unique(ignoreRecord:true)
+                    ->visibleOn('edit'),
                 Textarea::make('description')
+                    ->rows(3)
                     ->default(null)
                     ->columnSpanFull(),
                 FileUpload::make('image')
+                    ->disk('public')
+                    ->directory('categories')
+                    ->imageEditor()
+                    ->preserveFilenames()
+                    ->downloadable()
                     ->image(),
                 ]),
-                
-                Toggle::make('is_active')
+
+                Section::make('Dispaly Settings')
+                ->columns(2)
+                ->schema([
+                    Toggle::make('is_active')
                     ->required(),
-                TextInput::make('sort_order')
+                    TextInput::make('sort_order')
                     ->required()
                     ->numeric()
                     ->default(0),
-                TextInput::make('meta_title')
+                ]),
+                
+                Section::make('SEO')
+                ->schema([
+                    TextInput::make('meta_title')
                     ->default(null),
                 Textarea::make('meta_description')
                     ->default(null)
                     ->columnSpanFull(),
+                ]),
+
+
+                
             ]);
     }
 }
