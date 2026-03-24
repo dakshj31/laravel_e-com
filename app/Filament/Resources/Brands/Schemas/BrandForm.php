@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\Categories\Schemas;
+namespace App\Filament\Resources\Brands\Schemas;
 
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\TextInput;
@@ -9,56 +9,49 @@ use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 
-class CategoryForm
+class BrandForm
 {
     public static function configure(Schema $schema): Schema
     {
         return $schema
             ->components([
-                Section::make('Category Information')
+                Section::make('Brand Information')
                 ->columnSpanFull()
                 ->columns(2)
                 ->schema([
-                    TextInput::make('name')
+                TextInput::make('name')
                     ->required(),
                 TextInput::make('slug')
-                    ->unique(ignoreRecord:true)
+                ->unique(ignoreRecord:true)
                     ->readOnly()
-                    ->visibleOn('edit'),
+                    ->visibleOn('edit')
+                    ->required(),
                 Textarea::make('description')
                     ->rows(3)
                     ->default(null)
                     ->columnSpanFull(),
-                FileUpload::make('image')
+                FileUpload::make('logo')
                     ->disk('public')
-                    ->directory('categories')
+                    ->directory('brands')
                     ->imageEditor()
-                    ->preserveFilenames()
-                    ->downloadable()
-                    ->image(),
+                    ->maxSize(2048)
+                    ->image()   
+                    ->default(null),
+                TextInput::make('website')
+                    ->url()
+                    ->default(null),
                 ]),
 
-                Section::make('Dispaly Settings')
-                ->columns(2)
+                Section::make('Display Settings')
                 ->schema([
                     Toggle::make('is_active')
                     ->required(),
-                    TextInput::make('sort_order')
+                TextInput::make('sort_order')
                     ->required()
                     ->numeric()
                     ->default(0),
-                ]),
+                    ]),
                 
-                Section::make('SEO')
-                ->schema([
-                    TextInput::make('meta_title')
-                    ->default(null),
-                Textarea::make('meta_description')
-                    ->default(null)
-                    ->columnSpanFull(),
-                ]),
-
-
                 
             ]);
     }
