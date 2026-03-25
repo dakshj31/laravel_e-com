@@ -38,8 +38,9 @@ class BrandForm
                     ->image()   
                     ->default(null),
                 TextInput::make('website')
+                    ->placeholder('https://example.com')
                     ->url()
-                    ->default(null),
+                    
                 ]),
 
                 Section::make('Display Settings')
