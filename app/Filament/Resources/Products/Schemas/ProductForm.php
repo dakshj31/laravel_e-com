@@ -2,11 +2,16 @@
 
 namespace App\Filament\Resources\Products\Schemas;
 
+use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Toggle;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Tabs;
+use Filament\Schemas\Components\Tabs\Tab;
+use Filament\Support\Icons\Heroicon;
 
 class ProductForm
 {
@@ -14,25 +19,77 @@ class ProductForm
     {
         return $schema
             ->components([
-                TextInput::make('category_id')
-                    ->required()
-                    ->numeric(),
-                TextInput::make('brand_id')
-                    ->numeric()
-                    ->default(null),
-                TextInput::make('name')
-                    ->required(),
-                TextInput::make('slug')
-                    ->required(),
+
+                Tabs::make('Product Details')
+                    ->tabs([
+                        Tab::make('Basic information')
+                        ->icon(Heroicon::InformationCircle)
+                            ->schema([
+                                Section::make('Product Details')
+                                ->schema([
+                                    TextInput::make('name')
+                                        ->required(),
+                                    TextInput::make('slug')
+                                        ->unique(ignoreRecord: true)
+                                        ->visible(fn(string $operation) => $operation === 'edit')
+                                        ->required(),
+                                    Select::make('category_id')
+                                        ->relationship('category', 'name')
+                                        ->preload()
+                                        ->searchable()
+                                        ->required()
+                                        ->createOptionForm([
+                                            TextInput::make('name')
+                                                ->required(),
+                                            TextInput::make('slug')
+                                                ->unique(ignoreRecord:true)
+                                                ->readOnly()
+                                                ->visibleOn('edit'),
+                                        ]),
+                                    Select::make('brand_id')
+                                        ->relationship('brand', 'name')
+                                        ->preload()
+                                        ->searchable()
+                                        ->createOptionForm([
+                                            TextInput::make('name')
+                                                ->required(),
+                                            TextInput::make('slug')
+                                            ->unique(ignoreRecord:true)
+                                                ->readOnly()
+                                                ->visibleOn('edit')
+                                                ->required(),
+                                        ])
+                                        ->default(null),
+                                    
+                                ])->columns(2),
+
+                                Section::make('Product Description')
+                                ->schema([
+                                Textarea::make('short_description')
+                                    ->default(null)
+                                    ->columnSpanFull(),
+                                RichEditor::make('description')
+                                    ->default(null)
+                                    ->columnSpanFull(),
+
+                                ])
+                            ]),
+                        Tab::make('Pricing & Inventory')
+                        ->icon(Heroicon::CurrencyRupee)
+                            ->schema([
+                                // ...
+                            ]),
+                        Tab::make('Tab 3')
+                            ->schema([
+                                // ...
+                            ]),
+                        ]),
+
+                
                 TextInput::make('sku')
                     ->label('SKU')
                     ->required(),
-                Textarea::make('short_description')
-                    ->default(null)
-                    ->columnSpanFull(),
-                Textarea::make('description')
-                    ->default(null)
-                    ->columnSpanFull(),
+                
                 TextInput::make('price')
                     ->required()
                     ->numeric()
