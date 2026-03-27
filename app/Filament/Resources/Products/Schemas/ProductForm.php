@@ -77,7 +77,34 @@ class ProductForm
                         Tab::make('Pricing & Inventory')
                         ->icon(Heroicon::CurrencyRupee)
                             ->schema([
-                                // ...
+                                Section::make('Pricing')
+                                ->schema([
+                                TextInput::make('sku')
+                                    ->label('SKU')
+                                    ->unique(ignoreRecord:true)
+                                    ->helperText('Stock Keeping Unit - unique identifier')
+                                    ->required(),
+                                
+                                TextInput::make('price')
+                                    ->required()
+                                    ->numeric()
+                                    ->minValue(0)
+                                    ->step(0.01)
+                                    ->helperText('Selling Price')
+                                    ->prefix('₹'),
+                                TextInput::make('compare_price')
+                                    ->numeric()
+                                    ->minValue(0)
+                                    ->step(0.01)
+                                    ->helperText('Original Price to show discount')
+                                    ->prefix('₹'),
+                                TextInput::make('cost_price')
+                                    ->numeric()
+                                    ->minValue(0)
+                                    ->step(0.01)
+                                    ->helperText('Cost from supplier (for profit/loss calculation)')
+                                    ->prefix('₹'),
+                                ])
                             ]),
                         Tab::make('Tab 3')
                             ->schema([
@@ -86,22 +113,7 @@ class ProductForm
                         ]),
 
                 
-                TextInput::make('sku')
-                    ->label('SKU')
-                    ->required(),
                 
-                TextInput::make('price')
-                    ->required()
-                    ->numeric()
-                    ->prefix('$'),
-                TextInput::make('compare_price')
-                    ->numeric()
-                    ->default(null)
-                    ->prefix('$'),
-                TextInput::make('cost_price')
-                    ->numeric()
-                    ->default(null)
-                    ->prefix('$'),
                 TextInput::make('stock_quantity')
                     ->required()
                     ->numeric()
