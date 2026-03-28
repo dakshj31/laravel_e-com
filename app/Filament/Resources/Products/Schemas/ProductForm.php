@@ -7,6 +7,7 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Toggle;
+use Filament\Forms\Components\ToggleButtons;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Schemas\Components\Tabs;
@@ -21,6 +22,7 @@ class ProductForm
             ->components([
 
                 Tabs::make('Product Details')
+                ->columnSpanFull()
                     ->tabs([
                         Tab::make('Basic information')
                         ->icon(Heroicon::InformationCircle)
@@ -79,6 +81,7 @@ class ProductForm
                             ->schema([
                                 Section::make('Pricing')
                                 ->schema([
+
                                 TextInput::make('sku')
                                     ->label('SKU')
                                     ->unique(ignoreRecord:true)
@@ -92,19 +95,56 @@ class ProductForm
                                     ->step(0.01)
                                     ->helperText('Selling Price')
                                     ->prefix('₹'),
+
                                 TextInput::make('compare_price')
                                     ->numeric()
                                     ->minValue(0)
                                     ->step(0.01)
                                     ->helperText('Original Price to show discount')
                                     ->prefix('₹'),
+
                                 TextInput::make('cost_price')
                                     ->numeric()
                                     ->minValue(0)
                                     ->step(0.01)
                                     ->helperText('Cost from supplier (for profit/loss calculation)')
                                     ->prefix('₹'),
-                                ])
+                                ])->columns(2),
+
+                                Section::make('Inventory')
+                                ->schema([
+
+                                    Toggle::make('manage_stock')
+                                    ->default(true)
+                                    ->helpertext('Enable Stock management for this product')
+                                    ->live(),
+
+                                    TextInput::make('stock_quantity')
+                                    ->label('Stock Quantity')
+                                    ->required(fn(callable $get) => $get('manage_stock'))
+                                    ->disabled(fn(callable $get) => !$get('manage_stock'))
+                                    ->numeric()
+                                    ->default(0),
+
+                                    Select::make('low_stock_threshold')
+                                    ->options([
+                                        'in_stock' => 'In stock',
+                                        'out_of_stock' => 'Out of stock',
+                                        'on_backorder' => 'On backorder',
+                                    ])
+                                    ->native(false)
+                                    ->required()
+                                    ->default('in_stock'),
+
+                                    TextInput::make('weight')
+                                    ->label('Weight(kg)')
+                                    ->minValue('0')
+                                    ->helperText('Used for shipping calculations')
+                                    ->numeric()
+                                    ->default(null),
+                                    
+                                    
+                                ])->columns(2),
                             ]),
                         Tab::make('Tab 3')
                             ->schema([
@@ -114,18 +154,10 @@ class ProductForm
 
                 
                 
-                TextInput::make('stock_quantity')
-                    ->required()
-                    ->numeric()
-                    ->default(1),
-                TextInput::make('low_stock_threshold')
-                    ->required()
-                    ->numeric()
-                    ->default(10),
-                Toggle::make('manage_stock')
-                    ->required(),
-                Select::make('stock_status')
-                    ->options(['in_stock' => 'In stock', 'out_of_stock' => 'Out of stock', 'on_backorder' => 'On backorder'])
+                
+                
+                
+                
                     ->default('in_stock')
                     ->required(),
                 Toggle::make('is_active')
@@ -134,9 +166,7 @@ class ProductForm
                     ->required(),
                 Toggle::make('has_variants')
                     ->required(),
-                TextInput::make('weight')
-                    ->numeric()
-                    ->default(null),
+                
                 TextInput::make('meta_title')
                     ->default(null),
                 Textarea::make('meta_description')
