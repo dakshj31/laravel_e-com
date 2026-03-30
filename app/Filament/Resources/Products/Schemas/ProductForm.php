@@ -8,6 +8,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\ToggleButtons;
+use Filament\Forms\Components\FileUpload;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Filament\Schemas\Components\Tabs;
@@ -142,13 +143,37 @@ class ProductForm
                                     ->helperText('Used for shipping calculations')
                                     ->numeric()
                                     ->default(null),
-                                    
-                                    
                                 ])->columns(2),
                             ]),
-                        Tab::make('Tab 3')
+                        Tab::make('Images')
+                            ->icon(Heroicon::Photo)
                             ->schema([
-                                // ...
+                                Section::make('Product Images')
+                                ->description('Upload multiple images. The first image will be the primary image.')
+                                ->schema([
+                                    FileUpload::make('images')
+                                    ->label('Product Images')
+                                    ->multiple()
+                                    ->image()
+                                    ->directory('products')
+                                    ->imageEditor()
+                                    ->maxSize(2048)
+                                    ->reorderable()
+                                    ->columnSpanfull()
+                                    ->helperText('You can drag and drop to reorder images')
+                                    ->saveRelationshipsusing(function($component, $state, $record) {
+                                        // delete existing image
+                                        $record->images()->delete();
+
+                                        if(is_array($state)) {
+                                            foreach($state as $index => $imagePath) {
+                                                $record->images()->create([
+                                                    'image_path'
+                                                ]);
+                                            }
+                                        }
+                                    })
+                                ])
                             ]),
                         ]),
 
@@ -158,8 +183,8 @@ class ProductForm
                 
                 
                 
-                    ->default('in_stock')
-                    ->required(),
+                    // ->default('in_stock')
+                    // ->required(),
                 Toggle::make('is_active')
                     ->required(),
                 Toggle::make('is_featured')
