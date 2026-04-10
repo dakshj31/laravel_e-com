@@ -39,8 +39,9 @@ return new class extends Migration
             $table->string('payment_status')->default('pending');
             $table->string('transaction_id')->nullable();
             $table->enum('status',['pending','processing','shipped','delivered','cancelled'])->default('pending');
-            $table->string('transaction_number')->nullable();
+            $table->string('tracking_number')->nullable();
             $table->text('customer_notes')->nullable();
+            $table->text('admin_notes')->nullable();
 
             $table->timestamps();
             $table->softDeletes();

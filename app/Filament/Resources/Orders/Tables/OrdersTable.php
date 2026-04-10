@@ -18,6 +18,7 @@ class OrdersTable
         return $table
             ->columns([
                 TextColumn::make('order_number')
+                ->sortable()
                     ->searchable(),
                 TextColumn::make('customer_id')
                     ->numeric()
