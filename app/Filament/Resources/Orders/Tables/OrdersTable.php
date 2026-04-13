@@ -72,7 +72,7 @@ class OrdersTable
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
-            ->defaultSort('created_at' , 'desc')
+            ->defaultSort('created_at', 'desc')
             ->filters([
                 SelectFilter::make('status')
                     ->options([
@@ -84,14 +84,14 @@ class OrdersTable
                     ])
                     ->multiple()
                     ->native(false),
-                    SelectFilter::make('payment_status')
+                SelectFilter::make('payment_status')
                     ->options([
-                                'pending' => 'Pending',
-                                'paid' => 'Paid',
-                                'failed' => 'Failed',
-                                'refunded' => 'Refunded',
-                            ])
-                            ->native(false),
+                        'pending' => 'Pending',
+                        'paid' => 'Paid',
+                        'failed' => 'Failed',
+                        'refunded' => 'Refunded',
+                    ])
+                    ->native(false),
                 TrashedFilter::make(),
             ])
             ->recordActions([
