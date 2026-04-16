@@ -14,6 +14,7 @@ use Filament\Widgets\StatsOverviewWidget\Stat;
 class StatsOverview extends StatsOverviewWidget
 {
     protected ?string $pollingInterval = '10s';
+    protected static ?int $sort = 0;
     protected function getStats(): array
     {
         $totalRevenue = Order::where('payment_status','paid')->sum('total');
