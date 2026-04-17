@@ -16,6 +16,8 @@ class Customer extends Model
         'date_of_birth',
         'gender',
         'is_active',
+        'remember_token',
+        'email_verified_at',
     ];
 
     protected $hidden = [
