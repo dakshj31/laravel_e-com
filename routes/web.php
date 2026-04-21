@@ -1,5 +1,9 @@
 <?php
 
+use App\Livewire\Customer\Dashboard;
+use App\Livewire\Customer\Profile;
+use App\Livewire\Orders;
+use App\Livewire\ProductListing;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -7,10 +11,17 @@ Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
+Route::get('products', ProductListing::class)->name('products.index');
+
 Route::middleware('auth:customer')->group(function() {
+
+    Route::get('/my-account', Dashboard::class)->name('customer.dashboard');
+    Route::get('/my-account/orders', Orders::class)->name('customer.orders');
+    Route::get('/my-account/profile', Profile::class)->name('customer.profile');
+
     //logout
     Route::post('/logout', function() {
-        Auth::guard('customer')->logout();
+        auth('customer')->logout();
         request()->session()->invalidate();
         request()->session()->regenerateToken();
         return redirect('/');
