@@ -29,8 +29,8 @@ Route::middleware('auth:customer')->group(function() {
 });
 
 
-Route::view('dashboard', 'dashboard')
-    ->middleware(['auth', 'verified'])
-    ->name('dashboard');
+// Route::view('dashboard', 'dashboard')
+//     ->middleware(['auth', 'verified'])
+//     ->name('dashboard');
 
 require __DIR__.'/settings.php';
