@@ -1,3 +1,3 @@
-<div>
-    {{-- Waste no more time arguing what a good man should be, be one. - Marcus Aurelius --}}
+<div class="p-10">
+    <h1>Products Page Working ✅</h1>
 </div>

@@ -91,7 +91,7 @@
                 </form>
 
                 <!-- Social Login (Optional) -->
-                <div class="mt-6">
+                {{-- <div class="mt-6">
                     <div class="relative">
                         <div class="absolute inset-0 flex items-center">
                             <div class="w-full border-t border-gray-300"></div>
@@ -112,7 +112,7 @@
                         </a>
                     </div>
                 </div>
-            </div>
+            </div> --}}
 
             <!-- Back to Home -->
             <p class="mt-6 text-center text-sm text-gray-600">

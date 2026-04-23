@@ -1,6 +1,7 @@
 <?php
 
 use App\Livewire\Customer\Dashboard;
+use App\Livewire\Customer\OrderDetails;
 use App\Livewire\Customer\Profile;
 use App\Livewire\Orders;
 use App\Livewire\ProductListing;
@@ -13,10 +14,17 @@ Route::get('/', function () {
 
 Route::get('products', ProductListing::class)->name('products.index');
 
+// Route::get('/products', function () {
+//     dd('ROUTE IS WORKING');
+// });
+
+Route::get('/test', fn() => 'WORKING');
+
 Route::middleware('auth:customer')->group(function() {
 
     Route::get('/my-account', Dashboard::class)->name('customer.dashboard');
     Route::get('/my-account/orders', Orders::class)->name('customer.orders');
+    Route::get('/my-account/orders/{id}', OrderDetails::class)->name('customer.orders.show');
     Route::get('/my-account/profile', Profile::class)->name('customer.profile');
 
     //logout
