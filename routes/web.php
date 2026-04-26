@@ -3,14 +3,13 @@
 use App\Livewire\Customer\Dashboard;
 use App\Livewire\Customer\OrderDetails;
 use App\Livewire\Customer\Profile;
+use App\Livewire\HomePage;
 use App\Livewire\Orders;
 use App\Livewire\ProductListing;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('home');
+Route::get('/', HomePage::class)->name('home');
 
 Route::get('products', ProductListing::class)->name('products.index');
 
