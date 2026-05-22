@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
 use Livewire\Attributes\Url;
@@ -77,8 +78,16 @@ class ProductListing extends Component
             }
         }
 
+        //brand filter
+        if($this->brand) {
+            $brandModel = Brand::where('slug', $this->brand)->first();
+            if ($brandModel) {
+                $query->where('brand_id', $brandModel->id);
+            }
+        }
+
         $products = $query->paginate(12);
-        dd($products);
+        // dd($products);
         return view('livewire.product-listing')->layout('layouts.front-end-layout');
     }
 }
